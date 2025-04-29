@@ -1,0 +1,7 @@
+D:\Projects\curovaya\bin\Debug\curovaya.exe.config
+D:\Projects\curovaya\bin\Debug\curovaya.exe
+D:\Projects\curovaya\bin\Debug\curovaya.pdb
+D:\Projects\curovaya\obj\Debug\curovaya.csproj.AssemblyReference.cache
+D:\Projects\curovaya\obj\Debug\curovaya.csproj.CoreCompileInputs.cache
+D:\Projects\curovaya\obj\Debug\curovaya.exe
+D:\Projects\curovaya\obj\Debug\curovaya.pdb
