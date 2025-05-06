@@ -6,6 +6,7 @@ namespace AuctionSystem
 {
     class Program
     {
+
         static void Main()
         {
 
@@ -28,13 +29,13 @@ namespace AuctionSystem
 
                 switch (input)
                 {
-                    case "1": AddAuction(); break;
-                    case "2": AddItem(); break;
-                    case "3": RemoveItem(); break;
-                    case "4": RegisterSale(); break;
-                    case "5": ViewAuctions(); break;
-                    case "6": ViewItems(); break;
-                    case "7": RunQueries(); break;
+                    case "1": AddAuction(); DataStore.Save(); break;
+                    case "2": AddItem(); DataStore.Save(); break;
+                    case "3": RemoveItem(); DataStore.Save(); break;
+                    case "4": RegisterSale(); DataStore.Save(); break;
+                    case "5": ViewAuctions(); DataStore.Save(); break;
+                    case "6": ViewItems(); DataStore.Save(); break;
+                    case "7": RunQueries(); DataStore.Save(); break;
                     case "0": DataStore.Save(); return;
                     default: Console.WriteLine("Неверный ввод."); break;
                 }
@@ -49,8 +50,7 @@ namespace AuctionSystem
             string name = Console.ReadLine();
             Console.Write("Место: ");
             string location = Console.ReadLine();
-            Console.Write("Дата (yyyy-MM-dd): ");
-            DateTime date = DateTime.ParseExact(Console.ReadLine(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime date = ReadDate("Дата (yyyy-MM-dd): ");
             Console.Write("Спецификация (напр. 'Картины до 1900 г.'): ");
             string spec = Console.ReadLine();
 
@@ -65,8 +65,7 @@ namespace AuctionSystem
             string name = Console.ReadLine();
             Console.Write("Спецификация: ");
             string spec = Console.ReadLine();
-            Console.Write("Начальная цена: ");
-            decimal startPrice = decimal.Parse(Console.ReadLine());
+            decimal startPrice = ReadDecimal("Начальная цена: ");
             Console.Write("ID аукциона: ");
             int auctionId = int.Parse(Console.ReadLine());
             var auction = DataStore.Auctions.FirstOrDefault(a => a.Id == auctionId);
@@ -92,8 +91,7 @@ namespace AuctionSystem
 
         static void RemoveItem()
         {
-            Console.Write("ID предмета для удаления: ");
-            int itemId = int.Parse(Console.ReadLine());
+            int itemId = ReadInt("ID предмета для удаления: ");
 
             var item = DataStore.Items.FirstOrDefault(i => i.Id == itemId);
             if (item == null)
@@ -179,8 +177,7 @@ namespace AuctionSystem
         {
             Console.Write("Дата (yyyy-MM-dd): ");
             DateTime date = DateTime.ParseExact(Console.ReadLine(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            Console.Write("ID аукциона: ");
-            int auctionId = int.Parse(Console.ReadLine());
+            int auctionId = ReadInt("ID аукциона: ");
 
             var items = DataStore.Items
                 .Where(i => i.AuctionId == auctionId)
@@ -271,5 +268,43 @@ namespace AuctionSystem
             else
                 Console.WriteLine("Продавец не найден.");
         }
+        /// <summary>Вводит и проверяет int.</summary>
+        private static int ReadInt(string prompt)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                var s = Console.ReadLine();
+                if (int.TryParse(s, out var v)) return v;
+                Console.WriteLine(" Некорректное целое число, попробуйте ещё раз.");
+            }
+        }
+
+        /// <summary>Вводит и проверяет decimal.</summary>
+        private static decimal ReadDecimal(string prompt)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                var s = Console.ReadLine();
+                if (decimal.TryParse(s, out var v)) return v;
+                Console.WriteLine(" Некорректное число, попробуйте ещё раз.");
+            }
+        }
+
+        /// <summary>Вводит и проверяет дату yyyy‑MM‑dd.</summary>
+        private static DateTime ReadDate(string prompt)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                var s = Console.ReadLine();
+                if (DateTime.TryParseExact(s, "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
+                    return dt;
+                Console.WriteLine(" Некорректная дата. Формат: yyyy-MM-dd.");
+            }
+        }
+
     }
 }
